@@ -1,7 +1,6 @@
 
 ### README.md for `webhook-repo`
 
-```markdown
 # GitHub Webhook Receiver
 
 This repository contains a Flask application that serves as a webhook receiver for GitHub events. It captures events triggered from your GitHub repository (`action-repo`), stores them in MongoDB Atlas, and provides a clean, real-time interface to visualize the latest updates.
