@@ -11,8 +11,6 @@ This repository serves as the endpoint for GitHub webhook events. It receives ev
 - [Endpoints](#endpoints)
 - [Deployment](#deployment)
 - [Contributing](#contributing)
-- [License](#license)
-
 ## Setup
 
 1. **Clone the repository:**
@@ -129,7 +127,3 @@ To deploy the application to a public server, follow these steps:
 3. Commit your changes (`git commit -am 'Add new feature'`).
 4. Push to the branch (`git push origin feature-branch`).
 5. Create a new Pull Request.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
