@@ -1,20 +1,11 @@
-from flask import Flask, request, jsonify
-from pymongo import MongoClient
+from flask import Blueprint, request, jsonify, current_app
 from datetime import datetime
-import os
-from dotenv import load_dotenv
+from app.extensions import mongo
 
-load_dotenv()  # Load environment variables from .env file
+webhook = Blueprint('webhook', __name__, url_prefix='/webhook')
 
-app = Flask(__name__)
-
-# MongoDB Atlas connection string
-client = MongoClient(os.getenv('MONGO_URI'))
-db = client['github_events']
-collection = db['events']
-
-@app.route('/webhook', methods=['POST'])
-def webhook():
+@webhook.route('/receiver', methods=["POST"])
+def receiver():
     data = request.json
     event_type = request.headers.get('X-GitHub-Event')
 
@@ -45,13 +36,10 @@ def webhook():
     else:
         return jsonify({"msg": "Unhandled event type"}), 400
 
-    collection.insert_one(event)
+    mongo.db.events.insert_one(event)
     return jsonify({"msg": "Event received"}), 200
 
-@app.route('/events', methods=['GET'])
+@webhook.route('/events', methods=["GET"])
 def get_events():
-    events = list(collection.find({}, {'_id': False}).sort('timestamp', -1).limit(10))
+    events = list(mongo.db.events.find({}, {'_id': False}).sort('timestamp', -1).limit(10))
     return jsonify(events)
-
-if __name__ == '__main__':
-    app.run(debug=True)

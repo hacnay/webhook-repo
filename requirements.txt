@@ -1,1 +1,7 @@
-test
+
+Flask-Cors
+Flask-Login
+pymongo
+Flask
+flask_pymongo
+python-dotenv
