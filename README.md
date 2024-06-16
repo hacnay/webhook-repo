@@ -1,100 +1,135 @@
 
-### README.md for `webhook-repo`
+# Webhook Repository
 
-# GitHub Webhook Receiver
+This repository serves as the endpoint for GitHub webhook events. It receives events from the action-repo, stores them in MongoDB, and provides an endpoint to retrieve the latest events.
 
-This repository contains a Flask application that serves as a webhook receiver for GitHub events. It captures events triggered from your GitHub repository (`action-repo`), stores them in MongoDB Atlas, and provides a clean, real-time interface to visualize the latest updates.
+## Table of Contents
 
----
-
-## Overview
-
-### Features
-
-- **Webhook Integration**: Receive events like pushes, pull requests, and merges from GitHub.
-- **MongoDB Storage**: Persist event data in MongoDB Atlas for reliable storage.
-- **Real-time Updates**: Automatically fetch and display the latest events every 15 seconds on the frontend.
-
----
+- [Setup](#setup)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [Endpoints](#endpoints)
+- [Deployment](#deployment)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Setup
 
-1. **Clone the Repository**
+1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/your-username/webhook-repo.git
    cd webhook-repo
    ```
 
-2. **Install Dependencies**
-   - Set up a virtual environment (optional but recommended):
-     ```bash
-     python -m venv venv
-     source venv/bin/activate  # Activate virtual environment
-     ```
-   - Install required packages:
-     ```bash
-     pip install -r requirements.txt
-     ```
+2. **Create a virtual environment and activate it:**
 
-3. **Configure MongoDB Atlas**
-   - Create a MongoDB Atlas cluster and obtain your connection URI.
-   - Update the `.env` file with your MongoDB URI:
-     ```
-     MONGO_URI=mongodb+srv://<username>:<password>@<cluster-url>/<dbname>?retryWrites=true&w=majority
-     ```
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+   ```
 
-4. **Run the Flask Application**
-   - Set Flask app environment variables:
-     ```bash
-     export FLASK_APP=app.py
-     export FLASK_ENV=development  # Optional: Enable development mode
-     ```
-   - Run the application:
-     ```bash
-     flask run
-     ```
-   - The application will start locally at `http://localhost:5000/`.
+3. **Install the dependencies:**
 
----
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Set up your environment variables:**
+
+   Create a `.env` file in the root directory with the following content:
+
+   ```
+   MONGO_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/github_events?retryWrites=true&w=majority
+   ```
+
+   Replace `<username>` and `<password>` with your MongoDB Atlas credentials.
+
+5. **Run the application locally:**
+
+   ```bash
+   python run.py
+   ```
+
+## Usage
+
+1. **Set up the GitHub webhook:**
+
+   Go to your GitHub repository settings, navigate to **Webhooks**, and add a new webhook with the URL of your public server:
+
+   ```
+   http://<your-public-server>/webhook/receiver
+   ```
+
+2. **Trigger GitHub actions:**
+
+   Perform push, pull request, and merge actions in the action-repo to trigger the webhook.
+
+## Configuration
+
+All configuration is managed through environment variables defined in the `.env` file.
 
 ## Endpoints
 
-- **`POST /webhook`**: Receive and process GitHub webhook events.
-- **`GET /events`**: Fetch the latest events from MongoDB for display on the frontend.
+- **POST /webhook/receiver**
 
----
+  Receives GitHub webhook events and stores them in MongoDB.
 
-## Frontend
+- **GET /webhook/events**
 
-- Open `index.html` in your browser (`webhook-repo/index.html`) to view and monitor real-time GitHub events fetched from MongoDB Atlas.
-
----
+  Retrieves the latest events from MongoDB.
 
 ## Deployment
 
-- Deploy the Flask application on a cloud platform (e.g., Heroku, AWS) for production use.
-- Update the GitHub webhook URL in your `action-repo` to the deployed endpoint for seamless integration.
+To deploy the application to a public server, follow these steps:
 
----
+1. **Choose a hosting provider** (e.g., Heroku, AWS, DigitalOcean, etc.) and set up your server.
+2. **Clone the repository to your server:**
 
-## Technologies Used
+   ```bash
+   git clone https://github.com/your-username/webhook-repo.git
+   cd webhook-repo
+   ```
 
-- Python
-- Flask
-- MongoDB Atlas
-- HTML, CSS (for the frontend)
+3. **Create a virtual environment and activate it:**
 
----
+   ```bash
+   python -m venv venv
+   source venv/bin/activate
+   ```
+
+4. **Install the dependencies:**
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+5. **Set up your environment variables:**
+
+   Create a `.env` file in the root directory with the following content:
+
+   ```
+   MONGO_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/github_events?retryWrites=true&w=majority
+   ```
+
+6. **Run the application:**
+
+   ```bash
+   python run.py
+   ```
+
+7. **Ensure your server allows incoming traffic on the port the Flask application is running on (default is 5000).**
+
+8. **Update the GitHub webhook URL** to point to your public server's endpoint (e.g., `http://your-public-server/webhook/receiver`).
 
 ## Contributing
 
-- Fork the repository, make your changes, and submit a pull request.
-- Report issues or suggest improvements by opening an issue.
-
----
+1. Fork the repository.
+2. Create your feature branch (`git checkout -b feature-branch`).
+3. Commit your changes (`git commit -am 'Add new feature'`).
+4. Push to the branch (`git push origin feature-branch`).
+5. Create a new Pull Request.
 
 ## License
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
-
-
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
