@@ -1,4 +1,3 @@
-
 # Webhook Repository
 
 This repository serves as the endpoint for GitHub webhook events. It receives events from the action-repo, stores them in MongoDB, and provides an endpoint to retrieve the latest events.
@@ -9,8 +8,9 @@ This repository serves as the endpoint for GitHub webhook events. It receives ev
 - [Usage](#usage)
 - [Configuration](#configuration)
 - [Endpoints](#endpoints)
-- [Deployment](#deployment)
 - [Contributing](#contributing)
+- [License](#license)
+
 ## Setup
 
 1. **Clone the repository:**
@@ -43,7 +43,7 @@ This repository serves as the endpoint for GitHub webhook events. It receives ev
 
    Replace `<username>` and `<password>` with your MongoDB Atlas credentials.
 
-5. **Run the application locally:**
+5. **Run the application:**
 
    ```bash
    python run.py
@@ -51,15 +51,21 @@ This repository serves as the endpoint for GitHub webhook events. It receives ev
 
 ## Usage
 
-1. **Set up the GitHub webhook:**
+1. **Expose the local server using ngrok:**
 
-   Go to your GitHub repository settings, navigate to **Webhooks**, and add a new webhook with the URL of your public server:
-
-   ```
-   http://<your-public-server>/webhook/receiver
+   ```bash
+   ngrok http 5000
    ```
 
-2. **Trigger GitHub actions:**
+2. **Set up the GitHub webhook:**
+
+   Go to your GitHub repository settings, navigate to **Webhooks**, and add a new webhook with the ngrok URL:
+
+   ```
+   http://<your-ngrok-url>/webhook/receiver
+   ```
+
+3. **Trigger GitHub actions:**
 
    Perform push, pull request, and merge actions in the action-repo to trigger the webhook.
 
@@ -77,48 +83,64 @@ All configuration is managed through environment variables defined in the `.env`
 
   Retrieves the latest events from MongoDB.
 
-## Deployment
+## Contributing
 
-To deploy the application to a public server, follow these steps:
+1. Fork the repository.
+2. Create your feature branch (`git checkout -b feature-branch`).
+3. Commit your changes (`git commit -am 'Add new feature'`).
+4. Push to the branch (`git push origin feature-branch`).
+5. Create a new Pull Request.
 
-1. **Choose a hosting provider** (e.g., Heroku, AWS, DigitalOcean, etc.) and set up your server.
-2. **Clone the repository to your server:**
+## License
 
-   ```bash
-   git clone https://github.com/your-username/webhook-repo.git
-   cd webhook-repo
-   ```
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+```
 
-3. **Create a virtual environment and activate it:**
+These README files provide a comprehensive guide for setting up, using, and contributing to both repositories. Feel free to modify the content as necessary to fit your specific requirements and preferences.
 
-   ```bash
-   python -m venv venv
-   source venv/bin/activate
-   ```
+- [Setup](#setup)
+- [Usage](#usage)
+- [Contributing](#contributing)
 
-4. **Install the dependencies:**
+## Setup
 
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-5. **Set up your environment variables:**
-
-   Create a `.env` file in the root directory with the following content:
-
-   ```
-   MONGO_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/github_events?retryWrites=true&w=majority
-   ```
-
-6. **Run the application:**
+1. **Clone the repository:**
 
    ```bash
-   python run.py
+   git clone https://github.com/your-username/action-repo.git
+   cd action-repo
    ```
 
-7. **Ensure your server allows incoming traffic on the port the Flask application is running on (default is 5000).**
+2. **Create a new branch for your changes:**
 
-8. **Update the GitHub webhook URL** to point to your public server's endpoint (e.g., `http://your-public-server/webhook/receiver`).
+   ```bash
+   git checkout -b feature-branch
+   ```
+
+3. **Make your changes and commit them:**
+
+   ```bash
+   git add .
+   git commit -m "Describe your changes"
+   ```
+
+4. **Push your changes to GitHub:**
+
+   ```bash
+   git push origin feature-branch
+   ```
+
+5. **Create a pull request** from your feature branch to the main branch.
+
+## Usage
+
+1. **Trigger Actions:**
+   - Push: Make changes to the repository and push them to GitHub.
+   - Pull Request: Create a pull request from one branch to another.
+   - Merge: Merge a pull request.
+
+2. **Webhooks:**
+   - Ensure the webhook is configured to point to the webhook-repo endpoint (e.g., `http://your-public-server/webhook/receiver`).
 
 ## Contributing
 
@@ -127,3 +149,5 @@ To deploy the application to a public server, follow these steps:
 3. Commit your changes (`git commit -am 'Add new feature'`).
 4. Push to the branch (`git push origin feature-branch`).
 5. Create a new Pull Request.
+
+
